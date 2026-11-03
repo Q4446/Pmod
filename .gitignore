@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+desktop/node_modules/
+integrations/dsh/node_modules/
+integrations/dsh/local-web/node_modules/
+integrations/dsh/downloads/
+integrations/dsh/output/
+integrations/dsh/local-web/edge-profile/
+
+# Build artifacts & package outputs
+desktop/dist/
+desktop/src-tauri/target/
+desktop/src-tauri/gen/
+dist/
+*.iss
+
+# Runtime volatile data & process state
+runtime/logs/*
+!runtime/logs/.gitkeep
+runtime/cache/*
+!runtime/cache/.gitkeep
+runtime/temp/*
+!runtime/temp/.gitkeep
+runtime/dsh-home/*
+!runtime/dsh-home/.gitkeep
+runtime/processes.json
+
+# Local configurations & backups
+config/local.json
+config/local.json.bak
+*.bak
+
+# Engine binaries & dynamic libraries (kept locally on disk, excluded from git history)
+runtime/engine/*.exe
+runtime/engine/*.dll
+runtime/node/*.exe
+
+# Model weights
+models/
+*.ninfer
+*.gguf
+*.safetensors
+*.zip
+*.7z
+
+# Logs & OS metadata
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
