@@ -653,3 +653,31 @@ body {
 @keyframes btn-spin {
   to { transform: rotate(360deg); }
 }
+
+/* Harmonized Model Identifier Tile */
+.tile-value-id {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+  cursor: default !important;
+}
+
+[data-theme="dark"] .tile-value-id {
+  color: #cbd5e1 !important;
+}
+
+/* VRAM Process Table Non-Wrap Protections */
+.vram-data-table th,
+.vram-data-table td {
+  white-space: nowrap !important;
+}
+
+.cat-pill {
+  white-space: nowrap !important;
+  display: inline-block !important;
+}

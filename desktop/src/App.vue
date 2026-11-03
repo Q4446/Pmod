@@ -2414,7 +2414,7 @@ function getCategoryLabel(cat: string): string {
     case "ide":
       return t("开发集成环境", "IDE / Code");
     case "system":
-      return t("Windows 系统组件", "System Component");
+      return t("系统组件", "System Component");
     case "driver":
       return t("硬件/驱动组件", "Driver / Hardware");
     default:
@@ -4384,7 +4384,7 @@ onUnmounted(() => {
                 <tr>
                   <th style="width: 55px;">排名</th>
                   <th>应用程序 / 进程名</th>
-                  <th style="width: 120px;">{{ t('类型', 'Type') }}</th>
+                  <th style="width: 130px; white-space: nowrap;">{{ t('类型', 'Type') }}</th>
                   <th style="width: 80px;">PID</th>
                   <th style="width: 150px;">
                     {{ selectedGpuTab === 'dgpu' ? t('独显物理显存占用', 'Dedicated VRAM') : t('核显共享内存占用', 'iGPU Shared Memory') }}
@@ -4768,9 +4768,9 @@ onUnmounted(() => {
                     </div>
                     <div class="spec-tile">
                       <span class="tile-label">{{ t('模型服务标识 (Model ID)', 'Model Identifier') }}</span>
-                      <div class="tile-input-wrap">
-                        <input type="text" class="tile-inline-input" v-model="appConfig.ModelId" placeholder="qwen-local" />
-                      </div>
+                      <span class="tile-value text-slate tile-value-id" :title="appConfig?.ModelId || parsedModelMeta.name || 'qwen-local'">
+                        {{ appConfig?.ModelId || parsedModelMeta.name || 'qwen-local' }}
+                      </span>
                     </div>
                   </div>
 
@@ -5049,6 +5049,10 @@ onUnmounted(() => {
 
               <div class="accordion-body" v-if="showAdvancedConfig">
                 <div class="ports-six-grid">
+                  <div class="port-tile">
+                    <label class="port-label">{{ t('服务模型标识 (Model ID)', 'Model ID') }}</label>
+                    <input type="text" class="port-input" v-model="appConfig.ModelId" placeholder="qwen-local" />
+                  </div>
                   <div class="port-tile">
                     <label class="port-label">{{ t('推理服务端口 (EnginePort)', 'Engine Port') }}</label>
                     <input type="number" class="port-input" v-model.number="appConfig.EnginePort" placeholder="1234" />
@@ -5613,7 +5617,7 @@ onUnmounted(() => {
             <!-- Footer -->
             <div class="about-page-footer">
               <p class="footer-license-note">
-                Copyright © 2026 Pmod. 作者 QQ: 785029497. All rights reserved. 开源许可证：Apache License 2.0 & NVIDIA CUDA EULA.
+                Copyright © 2026 Pmod. 作者: 复读机 (QQ: 785029497) · 交流群: 1128130199. All rights reserved. 开源许可证：Apache License 2.0 & NVIDIA CUDA EULA.
               </p>
             </div>
           </div>
@@ -9667,12 +9671,14 @@ onUnmounted(() => {
   color: #64748b;
   font-size: 11.5px;
   border-bottom: 1px solid #eef2f7;
+  white-space: nowrap !important;
 }
 
 .vram-data-table td {
   padding: 10px 14px;
   border-bottom: 1px solid #f8fafc;
   vertical-align: middle;
+  white-space: nowrap !important;
 }
 
 .vram-data-table tr:hover td {
@@ -9703,6 +9709,8 @@ onUnmounted(() => {
   padding: 2px 8px;
   border-radius: 4px;
   font-weight: 500;
+  white-space: nowrap !important;
+  display: inline-block !important;
 }
 
 .cat-badge-client { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
@@ -10796,6 +10804,18 @@ onUnmounted(() => {
   font-size: 13.5px;
   font-weight: 700;
   font-family: var(--font-mono);
+}
+
+.tile-value-id {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  cursor: default;
 }
 
 .tile-inline-input {
