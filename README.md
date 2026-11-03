@@ -1,17 +1,62 @@
-# Pmod 本地大模型管理平台 (Pmod Desktop Local Agent)
+# 🚀 Pmod - 本地大模型一体化管理平台 (Pmod Desktop Local Agent)
 
-Pmod 是专为大语言模型本地高性能推理、长上下文长程思维及多智能体协同设计的桌面级一体化管理平台与客户端。
+<div align="center">
+
+[![Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/Q4446/Pmod)
+[![License](https://img.shields.io/badge/License-Apache%202.0%20%26%20NVIDIA%20CUDA%20EULA-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20x64-orange.svg)](#)
+[![QQ Group](https://img.shields.io/badge/QQ交流群-1128130199-red.svg)](https://qun.qq.com/universal-share/share?ac=1&authKey=O9lTkl%2B56Zf8U%2BMSk3UrLK7HmOIJZlhbfESHPi1PUSo2PBHzH6o003oDOf9UAJFg&busi_data=eyJncm91cENvZGUiOiIxMTI4MTMwMTk5IiwidG9rZW4iOiJ5a1M5T0dmeFBKVDg2bnRYaHJkcFhTYXh5NjJWcUtDdHlpNk1HZWdUT2FqZDJkTUMzci9EUFFPVU55b1ZCL01yIiwidWluIjoiNzg1MDI5NDk3In0%3D&data=qDBRJgG4lwWBURR5AYk5mFRku441wXmLM2AdJqE-E6ZIaL3X6ljAIp2woaaHgY6TQIqsfXnGPEhGUGW5m-KjXw&svctype=4&tempid=h5_group_info)
+
+**Pmod** 是专为大语言模型本地高性能推理、长上下文长程思维及多智能体协同设计的桌面级一体化管理平台与智能对话工作台。
+
+</div>
 
 ---
 
-## 🌟 核心特性
+## 📸 功能界面全景展示
 
-- **现代高颜值客户端**：基于 Tauri 2.0 + Vue 3 构建的高性能、极低系统资源占用的桌面端；
-- **分层 KV 缓存调度**：支持 GPU 原生显存与系统宿主内存协同的 KVMem 分层管理，从容支持 256K 超长上下文；
+### 1. 智能对话工作台 (沉浸式智能体协同环境)
+内置深度集成的智能体工作台，原生支持多轮深度思考推理、工作区环境绑定、工具调用及流式代码输出，让本地大模型发挥最强研发与交互能力。
+
+![智能对话工作台](docs/images/02-chat.png)
+
+---
+
+### 2. 就绪待机与生态接口引导
+启动前 GPU 处于零功耗休眠待命状态。内置标准 OpenAI Compatible API 代理网关（默认 `:1236` 端口），可无缝对接 VS Code、Cursor、Claude Code 等主流开发工具与客户端生态。
+
+![就绪待机与生态接口引导](docs/images/01-standby.jpg)
+
+---
+
+### 3. 推理性能与会话统计面板
+全周期监控大模型运行状态，实时捕获平均生成速率 (tok/s)、首字时延 (TTFT)、思考耗时与 KV 缓存命中率。提供直观的波动走势图、Token 构成堆叠分析与轮次级诊断参数。
+
+![推理性能与会话统计面板](docs/images/03-stats.jpg)
+
+---
+
+### 4. 引擎、模型与显卡驱动配置
+系统自动穿透二进制解析模型架构、参数体量及量化精度；自适应嗅探显卡硬件架构（深度适配 RTX 50 系 Blackwell 与 Ada 架构），并支持显存与系统内存分层 KV 缓存调度。
+
+![引擎模型与显卡驱动配置](docs/images/04-model-config.jpg)
+
+---
+
+### 5. 显存管理与多卡进程智能调度
+实时探针嗅探 Windows 当前独显物理显存与核显共享显存分配，分类列出所有占用进程，支持将各类后台应用一键迁移调度至核显，为本地大模型释放最大的极致显存空间。
+
+![显存管理与多卡进程智能调度](docs/images/05-vram-manager.jpg)
+
+---
+
+## 🌟 核心架构与技术亮点
+
+- **现代高颜值客户端**：基于 Tauri 2.0 (Rust) + Vue 3.5 构建，极低系统资源占用，秒级冷启动；
+- **分层 KV 缓存调度 (KVMem)**：支持 GPU 原生显存与系统宿主内存协同驱动，从容承载 256K 超长上下文长程思维；
 - **双模量化支持**：原生支持 `nvfp4`（NVIDIA Blackwell / Ada 架构 TensorCore 硬件加速）与 `rk4v4`（极低显存占用压缩格式）；
-- **动态硬件探测与适配**：自适应读取真实 GPU 显存余量并进行智能推荐，绝无机型与显存写死；
-- **全周期监控与度量**：实时捕获思考耗时、首字时延 (TTFT)、解码生成速度及 Token 吞吐分布；
-- **零写死路径自适应架构**：采用动态根目录嗅探引擎，安装到任意电脑、任意磁盘（如 `C:`、`D:`、移动硬盘）均可即装即用。
+- **动态硬件自适应嗅探**：自适应读取真实 GPU 显存余量并进行智能推荐，杜绝显存写死；
+- **零维护云端版本更新**：内置国内高可用多镜像源（支持 ghproxy、jsDelivr CDN 毫秒级轮询与超时熔断），支持客户端一键检测正式版。
 
 ---
 
@@ -19,13 +64,15 @@ Pmod 是专为大语言模型本地高性能推理、长上下文长程思维及
 
 ```text
 Pmod/
-├── desktop/               # 桌面客户端源码工程
+├── desktop/               # 桌面客户端源码工程 (Tauri 2.0 + Vue 3.5 + TypeScript)
 │   ├── src/               # Vue 3 前端界面源码 (仪表盘、状态机、图表、配置面板)
 │   ├── src-tauri/         # Tauri 2.0 Rust 后端核心 (进程守护、VRAM 探针、遥测总线)
 │   ├── package.json       # 前端依赖配置
 │   └── vite.config.ts     # Vite 构建配置
+├── docs/                  # 项目文档与高清界面截图
+│   └── images/            # README 演示图集
 ├── runtime/               # 独立运行时支持库
-│   ├── engine/            # Ninfer 1.0.0 推理引擎与 CUDA/FFmpeg 动态库
+│   ├── engine/            # Ninfer 推理引擎与 CUDA/FFmpeg 动态库
 │   ├── node/              # 便携式 Node.js 运行时
 │   ├── logs/              # 运行日志输出目录
 │   ├── cache/             # 运行时缓存与 Playwright 资源
@@ -38,9 +85,9 @@ Pmod/
 │   ├── local.json         # 本地实际运行参数 (包含模型路径、端口及显存池分配)
 │   ├── example.json       # 标准默认配置模版
 │   └── downloads.json     # 依赖下载哈希与来源清单
-├── templates/             # Jinja2 增强对话模版
+├── version.json           # 云端版本号与发布更新清单
 ├── scripts/               # 运维与自动化工具
-│   ├── build-inno-installer.ps1  # Inno Setup 一键全自动独立安装包编译器
+│   ├── build-inno-installer.ps1  # Inno Setup 一键独立离线安装包编译器
 │   ├── configure-dsh.mjs         # DSH 运行环境与补丁配置器
 │   ├── get-gpu-process-vram.ps1  # GPU 显存精准嗅探脚本
 │   └── common.ps1                # 基础运维函数库
@@ -81,7 +128,7 @@ powershell -ExecutionPolicy Bypass -File scripts/build-inno-installer.ps1
 ## 🚀 启动与运行
 
 - **桌面图形化运行**：直接双击运行编译出的 `Pmod.exe` 或通过安装包安装后由桌面快捷方式启动；
-- **命令行静默调试**：
+- **命令行快捷启动**：
   ```powershell
   .\start.cmd
   ```
@@ -92,9 +139,9 @@ powershell -ExecutionPolicy Bypass -File scripts/build-inno-installer.ps1
 
 ---
 
-## 👨‍💻 作者信息
+## 👨‍💻 作者与交流群
 
 - **作者**：复读机
 - **作者 QQ**：`785029497`
-- **交流群**：`1128130199`
-
+- **官方交流群**：`1128130199`
+- **一键加入官方交流群**：[点击直接加入 QQ 群](https://qun.qq.com/universal-share/share?ac=1&authKey=O9lTkl%2B56Zf8U%2BMSk3UrLK7HmOIJZlhbfESHPi1PUSo2PBHzH6o003oDOf9UAJFg&busi_data=eyJncm91cENvZGUiOiIxMTI4MTMwMTk5IiwidG9rZW4iOiJ5a1M5T0dmeFBKVDg2bnRYaHJkcFhTYXh5NjJWcUtDdHlpNk1HZWdUT2FqZDJkTUMzci9EUFFPVU55b1ZCL01yIiwidWluIjoiNzg1MDI5NDk3In0%3D&data=qDBRJgG4lwWBURR5AYk5mFRku441wXmLM2AdJqE-E6ZIaL3X6ljAIp2woaaHgY6TQIqsfXnGPEhGUGW5m-KjXw&svctype=4&tempid=h5_group_info)
