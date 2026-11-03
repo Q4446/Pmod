@@ -5394,8 +5394,8 @@ onUnmounted(() => {
                     </svg>
                   </div>
                   <div class="pref-text">
-                    <div class="pref-title">{{ t('软件版本与更新', 'Version & Updates') }}</div>
-                    <div class="pref-desc">{{ t('当前版本 v1.0.0 (Release) · 点击按钮连接服务器检测最新正式版', 'Current v1.0.0 (Release) · Click button to check for new releases') }}</div>
+                    <div class="pref-title">{{ t('软件版本', 'Software Version') }}</div>
+                    <div class="pref-desc">{{ t('当前版本 v1.0.0 (Release)', 'Current v1.0.0 (Release)') }}</div>
                   </div>
                 </div>
                 <div class="pref-action">
