@@ -334,7 +334,7 @@ async function checkAppUpdate() {
   isCheckingUpdate.value = false;
 
   if (!data || !data.version) {
-    await showAlertModal({
+    await showAlert({
       title: t("检查更新提示", "Check Update Notification"),
       message: t(
         "未能成功连接到版本更新服务器，请检查网络连接，或直接加入官方交流群（1128130199）获取最新安装包。",
@@ -349,7 +349,7 @@ async function checkAppUpdate() {
   if (isNewerVersion(data.version, currentVer)) {
     const changesText = (data.changelog || []).map((item) => `• ${item}`).join("\n");
     const msg = `${data.title || "Pmod 发现新版本 " + data.version} (${data.releaseDate || ""})\n\n${changesText}\n\n${data.notice || ""}`;
-    const confirmed = await showConfirmModal({
+    const confirmed = await showConfirm({
       title: t(`🎉 发现新版本 v${data.version}`, `🎉 New Version v${data.version} Available`),
       message: msg,
       confirmText: t("前往下载更新", "Download Update"),
@@ -367,7 +367,7 @@ async function checkAppUpdate() {
       }
     }
   } else {
-    await showAlertModal({
+    await showAlert({
       title: t("已是最新版本", "Up to Date"),
       message: t(
         `当前运行的 Pmod (v${currentVer}) 已是最新正式版本，暂无可用更新。`,
@@ -5442,6 +5442,35 @@ onUnmounted(() => {
                       <span>{{ t('蓝海清冽', 'Ocean Blue') }}</span>
                     </button>
                   </div>
+                </div>
+              </div>
+
+              <!-- Item 4: 软件版本与检查更新 (用户主动点击才检查，绝不自动弹窗) -->
+              <div class="pref-row">
+                <div class="pref-lead">
+                  <div class="pref-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pref-icon-svg">
+                      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                    </svg>
+                  </div>
+                  <div class="pref-text">
+                    <div class="pref-title">{{ t('软件版本与更新', 'Version & Updates') }}</div>
+                    <div class="pref-desc">{{ t('当前版本 v1.0.0 (Release) · 点击按钮连接服务器检测最新正式版', 'Current v1.0.0 (Release) · Click button to check for new releases') }}</div>
+                  </div>
+                </div>
+                <div class="pref-action">
+                  <button
+                    class="btn-pref-ghost"
+                    :disabled="isCheckingUpdate"
+                    @click="checkAppUpdate"
+                    :title="t('点击检查是否有新版本可用', 'Click to check for updates')"
+                  >
+                    <svg v-if="!isCheckingUpdate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 13px; height: 13px;">
+                      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                    </svg>
+                    <span v-else class="btn-spinner-dot" style="width: 11px; height: 11px;"></span>
+                    <span>{{ isCheckingUpdate ? t('检查中...', 'Checking...') : t('检查更新', 'Check for Updates') }}</span>
+                  </button>
                 </div>
               </div>
             </div>
