@@ -12610,6 +12610,62 @@ onUnmounted(() => {
   box-shadow: 0 2px 6px var(--accent-primary-shadow, rgba(37, 99, 235, 0.25));
 }
 
+.community-action-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-check-update {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.btn-check-update:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #94a3b8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn-check-update:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-check-svg {
+  width: 14px !important;
+  height: 14px !important;
+  max-width: 14px !important;
+  max-height: 14px !important;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.btn-spinner-dot {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #94a3b8;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.8s linear infinite;
+  display: inline-block;
+}
+
 .btn-join-svg {
   width: 15px;
   height: 15px;
