@@ -314,14 +314,22 @@ async function checkAppUpdate() {
 
   const currentVer = "1.0.0";
   const mirrors = [
+    "https://ghproxy.net/https://raw.githubusercontent.com/Q4446/Pmod/main/version.json",
     "https://fastly.jsdelivr.net/gh/Q4446/Pmod@main/version.json",
+    "https://cdn.jsdelivr.net/gh/Q4446/Pmod@main/version.json",
     "https://raw.githubusercontent.com/Q4446/Pmod/main/version.json"
   ];
 
   let data: RemoteVersionInfo | null = null;
   for (const url of mirrors) {
     try {
-      const resp = await fetch(`${url}?_t=${Date.now()}`, { cache: "no-store" });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const resp = await fetch(`${url}?_t=${Date.now()}`, {
+        cache: "no-store",
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
       if (resp.ok) {
         data = (await resp.json()) as RemoteVersionInfo;
         if (data && data.version) break;
