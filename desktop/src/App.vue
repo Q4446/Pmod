@@ -2508,6 +2508,15 @@ async function openInExternalBrowser() {
   }
 }
 
+function openModelDownloadUrl() {
+  const url = "https://huggingface.co/fyb1214/Huihui-Qwen3.8-27B-Abliterated-Swift-1.5-GSQ-RCO-NInfer/tree/main";
+  try {
+    invoke("open_in_browser", { url });
+  } catch (e) {
+    window.open(url, "_blank");
+  }
+}
+
 function onIframeLoad() {
   setTimeout(() => {
     postMessageToDsh({ type: "query-dsh-sidebar" });
@@ -4040,6 +4049,20 @@ onUnmounted(() => {
                       <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                     </svg>
                     <span>{{ t('选择本地模型文件 (.ninfer)', 'Select Model File (.ninfer)') }}</span>
+                  </button>
+
+                  <button
+                    v-if="!isModelConfigured"
+                    class="btn-standby-download"
+                    @click="openModelDownloadUrl"
+                    :title="t('前往 Hugging Face 下载官方适配模型权重 (.ninfer)', 'Go to Hugging Face to download official models (.ninfer)')"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="download-sub-svg">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>{{ t('获取官方适配模型权重 (Hugging Face)', 'Download Model Weights (Hugging Face)') }}</span>
                   </button>
 
                   <button
@@ -7722,6 +7745,33 @@ onUnmounted(() => {
   font-size: 12px;
   color: #94a3b8;
   line-height: 1.4;
+}
+
+.btn-standby-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.06);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+.btn-standby-download:hover {
+  background: rgba(79, 70, 229, 0.12);
+  border-color: rgba(79, 70, 229, 0.4);
+  transform: translateY(-1px);
+}
+.btn-standby-download .download-sub-svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 /* 3. 3-Column Readiness Grid */

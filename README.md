@@ -20,6 +20,48 @@
 
 ---
 
+## 📖 快速上手教程 (3 步即可运行)
+
+为了方便新用户从零快速跑通本地大模型与智能对话工作台，请遵循以下 3 步：
+
+### 步骤 1：下载本项目安装包并安装
+1. 前往 GitHub 仓库右侧的 [Releases 页面](https://github.com/Q4446/Pmod/releases/latest)；
+2. 下载最新发布安装包 `Pmod-Setup-v1.0.0.exe`（内含完整的 Ninfer 原生推理引擎、CUDA 13 运行时、便携式 Node 环境及 DSH 智能体协同套件）；
+3. 双击 `Pmod-Setup-v1.0.0.exe`，根据向导一键安装至任意磁盘目录，安装完成后直接由桌面快捷方式启动 Pmod。
+
+---
+
+### 步骤 2：根据硬件情况下载适配的模型
+Pmod 默认深度调优并推荐使用 **Huihui Qwen3.8-27B Abliterated · Swift-1.5 GSQ-RCO NInfer** 系列单文件 `.ninfer` 模型容器。
+
+- 📖 **模型技术简介与详情**：[Hugging Face README_zh.md](https://huggingface.co/fyb1214/Huihui-Qwen3.8-27B-Abliterated-Swift-1.5-GSQ-RCO-NInfer/blob/main/README_zh.md)
+- 📥 **模型权重文件下载通道**：[Hugging Face 模型文件列表 (Files and versions)](https://huggingface.co/fyb1214/Huihui-Qwen3.8-27B-Abliterated-Swift-1.5-GSQ-RCO-NInfer/tree/main)
+
+#### 硬件显存匹配与推荐下载对照表：
+| 量化档位 | 对应下载文件名 | 权重大小 | 适配硬件显存要求说明 |
+|:---|:---|:---:|:---|
+| **IQ2_XS** | `Huihui-Qwen3.8-27B-abliterated-Swift-1.5-GSQ-RCO-IQ2_XS-mtp.ninfer` | 8.34 GiB | **8 GB ~ 10 GB 显存**（轻量级显卡、显存较紧张设备） |
+| **IQ2_S** | `Huihui-Qwen3.8-27B-abliterated-Swift-1.5-GSQ-RCO-IQ2_S-mtp.ninfer` | 8.63 GiB | **10 GB ~ 12 GB 显存**（主流 10G/12G 移动端与桌面级显卡） |
+| **IQ3_XXS** ⭐ (黄金推荐) | `Huihui-Qwen3.8-27B-abliterated-Swift-1.5-GSQ-RCO-IQ3_XXS-mtp.ninfer` | 9.94 GiB | **RTX 5070 Ti Laptop (12GB) / 12GB 显卡**（推理速度、长上下文与精度的最佳黄金平衡点） |
+| **IQ3_S** | `Huihui-Qwen3.8-27B-abliterated-Swift-1.5-GSQ-RCO-IQ3_S-mtp.ninfer` | 11.50 GiB | **16 GB 及以上显卡**（RTX 4080 / 4090 / 5080，或启用宿主内存分层卸载） |
+
+> [!TIP]
+> **什么是 `.ninfer` 单文件容器？**  
+> 每个 `.ninfer` 都是自包含完整权重容器，内部已封装着文本塔（64 层，4:1 混合注意力）、视觉塔、MTP 投机头、分词器及多模态资源。**下载单个 `.ninfer` 文件即可独立运行**，无需额外下载或挂载其他繁杂补丁！
+
+---
+
+### 步骤 3：在 Pmod 中配置并加载模型
+1. 启动桌面端 **Pmod**；
+2. 首次进入时，在「对话」待命首页点击 **「选择本地模型文件 (.ninfer)」**（或在左侧导航切换至「模型」配置页，点击「浏览本地文件」）；
+3. 选中您刚刚下载好的 `.ninfer` 模型文件；系统将自动穿透二进制即时解析其架构（如 Qwen 27B）、层数（64层）及量化精度（如 IQ3_XXS）；
+4. 点击界面顶栏或中央的 **「启动模型」** 按钮：
+   - 引擎将在约 10 秒内完成显存快速映射与初始化；
+   - 启动完成后，界面自动无缝切换至全功能智能对话工作台；
+   - 同时后台自动开放标准 OpenAI Compatible API 代理网关（默认 `http://127.0.0.1:1236/v1`），可直接在 VS Code、Cursor 或 Claude Code 等客户端中无缝接入！
+
+---
+
 ## 📸 功能界面全景展示
 
 ### 1. 智能对话工作台 (沉浸式智能体协同环境)
