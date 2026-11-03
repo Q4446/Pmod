@@ -3,6 +3,7 @@
 <div align="center">
 
 [![Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/Q4446/Pmod)
+[![Model Driver](https://img.shields.io/badge/Model%20Driver-CSUNX233%2Fqwen3.8--27b--ninfer-8a2be2.svg)](https://github.com/CSUNX233/qwen3.8-27b-ninfer-5070tilaptop-kvmem-local-agent/tree/main)
 [![License](https://img.shields.io/badge/License-Apache%202.0%20%26%20NVIDIA%20CUDA%20EULA-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-orange.svg)](#)
 [![QQ Group](https://img.shields.io/badge/QQ交流群-1128130199-red.svg)](https://qun.qq.com/universal-share/share?ac=1&authKey=O9lTkl%2B56Zf8U%2BMSk3UrLK7HmOIJZlhbfESHPi1PUSo2PBHzH6o003oDOf9UAJFg&busi_data=eyJncm91cENvZGUiOiIxMTI4MTMwMTk5IiwidG9rZW4iOiJ5a1M5T0dmeFBKVDg2bnRYaHJkcFhTYXh5NjJWcUtDdHlpNk1HZWdUT2FqZDJkTUMzci9EUFFPVU55b1ZCL01yIiwidWluIjoiNzg1MDI5NDk3In0%3D&data=qDBRJgG4lwWBURR5AYk5mFRku441wXmLM2AdJqE-E6ZIaL3X6ljAIp2woaaHgY6TQIqsfXnGPEhGUGW5m-KjXw&svctype=4&tempid=h5_group_info)
@@ -10,6 +11,12 @@
 **Pmod** 是专为大语言模型本地高性能推理、长上下文长程思维及多智能体协同设计的桌面级一体化管理平台与智能对话工作台。
 
 </div>
+
+> [!IMPORTANT]
+> **底层模型与驱动支持仓库**：  
+> 本平台核心依赖并无缝驱动以下模型与高性能推理引擎架构仓库：  
+> 🔗 **[https://github.com/CSUNX233/qwen3.8-27b-ninfer-5070tilaptop-kvmem-local-agent/tree/main](https://github.com/CSUNX233/qwen3.8-27b-ninfer-5070tilaptop-kvmem-local-agent/tree/main)**  
+> 该仓库提供了专为 RTX 5070 Ti Laptop 及新一代 GPU 深度调优的 **Ninfer C++ 原生推理引擎**、**KVMem 显存/宿主内存分层调度架构**、**MTP3 投机加速**及 `IQ3_XXS` / `RK4V4` 定制量化制品。
 
 ---
 
@@ -25,28 +32,28 @@
 ### 2. 就绪待机与生态接口引导
 启动前 GPU 处于零功耗休眠待命状态。内置标准 OpenAI Compatible API 代理网关（默认 `:1236` 端口），可无缝对接 VS Code、Cursor、Claude Code 等主流开发工具与客户端生态。
 
-![就绪待机与生态接口引导](docs/images/01-standby.jpg)
+![就绪待机与生态接口引导](docs/images/01-standby.png)
 
 ---
 
 ### 3. 推理性能与会话统计面板
 全周期监控大模型运行状态，实时捕获平均生成速率 (tok/s)、首字时延 (TTFT)、思考耗时与 KV 缓存命中率。提供直观的波动走势图、Token 构成堆叠分析与轮次级诊断参数。
 
-![推理性能与会话统计面板](docs/images/03-stats.jpg)
+![推理性能与会话统计面板](docs/images/03-stats.png)
 
 ---
 
-### 4. 引擎、模型与显卡驱动配置
+### 4. 引擎配置、模型配置与显卡驱动配置
 系统自动穿透二进制解析模型架构、参数体量及量化精度；自适应嗅探显卡硬件架构（深度适配 RTX 50 系 Blackwell 与 Ada 架构），并支持显存与系统内存分层 KV 缓存调度。
 
-![引擎模型与显卡驱动配置](docs/images/04-model-config.jpg)
+![引擎模型与显卡驱动配置](docs/images/04-model-config.png)
 
 ---
 
 ### 5. 显存管理与多卡进程智能调度
 实时探针嗅探 Windows 当前独显物理显存与核显共享显存分配，分类列出所有占用进程，支持将各类后台应用一键迁移调度至核显，为本地大模型释放最大的极致显存空间。
 
-![显存管理与多卡进程智能调度](docs/images/05-vram-manager.jpg)
+![显存管理与多卡进程智能调度](docs/images/05-vram-manager.png)
 
 ---
 
