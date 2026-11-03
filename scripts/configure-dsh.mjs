@@ -42,6 +42,16 @@ for (const [pkg, expectedVersion] of Object.entries(SUPPORTED_PATCH_VERSIONS)) {
   }
 }
 
+// Ensure frontend index.html has layout scope fix & autofocus enhancements
+const frontendIndexTarget = path.join(dsh, 'node_modules/@deepseek-ai/dsh-web-frontend/dist/index.html');
+const frontendIndexPatch = path.join(dsh, 'patches/dsh-web-frontend-index.html');
+if (fs.existsSync(frontendIndexPatch) && fs.existsSync(path.dirname(frontendIndexTarget))) {
+  const patchContent = fs.readFileSync(frontendIndexPatch, 'utf8');
+  if (!fs.existsSync(frontendIndexTarget) || fs.readFileSync(frontendIndexTarget, 'utf8') !== patchContent) {
+    fs.writeFileSync(frontendIndexTarget, patchContent);
+  }
+}
+
 // Clean up any legacy junctions or fallback symlink directories so readdirp/chokidar
 // never encounters Windows NTFS junction realpath (-4094 UNKNOWN) errors.
 function removeLegacyFallbackDir(targetPath) {

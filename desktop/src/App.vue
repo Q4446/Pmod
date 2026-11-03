@@ -2488,9 +2488,35 @@ function handleDshMessage(event: MessageEvent) {
   }
 }
 
+function ensureIframeFocus() {
+  const iframe = document.querySelector<HTMLIFrameElement>(".dsh-seamless-frame");
+  if (iframe) {
+    try {
+      iframe.focus();
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.postMessage({ type: "focus-composer" }, "*");
+    } catch (e) {}
+  }
+}
+
+async function openInExternalBrowser() {
+  const url = serviceState.value.data?.web_url || "http://127.0.0.1:3080/";
+  try {
+    await invoke("open_in_browser", { url });
+  } catch (e) {
+    window.open(url, "_blank");
+  }
+}
+
 function onIframeLoad() {
-  setTimeout(() => postMessageToDsh({ type: "query-dsh-sidebar" }), 300);
-  setTimeout(() => postMessageToDsh({ type: "query-dsh-sidebar" }), 1000);
+  setTimeout(() => {
+    postMessageToDsh({ type: "query-dsh-sidebar" });
+    ensureIframeFocus();
+  }, 300);
+  setTimeout(() => {
+    postMessageToDsh({ type: "query-dsh-sidebar" });
+    ensureIframeFocus();
+  }, 1000);
 }
 
 function switchToChat() {
@@ -2498,6 +2524,7 @@ function switchToChat() {
   if (serviceState.value.status === "Running") {
     nextTick(() => {
       postMessageToDsh({ type: "query-dsh-sidebar" });
+      ensureIframeFocus();
     });
   }
 }
@@ -2902,6 +2929,21 @@ onUnmounted(() => {
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
             <span>{{ t('刷新界面', 'Refresh') }}</span>
+          </button>
+
+          <!-- Open in External Browser Button (Only in running chat) -->
+          <button
+            v-if="serviceState.status === 'Running' && currentTab === 'chat'"
+            class="btn-header-secondary"
+            @click="openInExternalBrowser"
+            :title="t('在独立浏览器中打开完整对话工作台', 'Open full agent workspace in external browser')"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-sub-svg">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            <span>{{ t('浏览器打开', 'Browser') }}</span>
           </button>
 
           <!-- Primary Start / Stop Model Action Button -->
@@ -3717,12 +3759,18 @@ onUnmounted(() => {
              ============================================================== -->
         <div v-show="currentTab === 'chat'" class="tab-page page-chat">
           <!-- State A: Running -> Seamless Full-Bleed DSH Agent -->
-          <div v-if="serviceState.status === 'Running'" class="chat-viewport-running">
+          <div
+            v-if="serviceState.status === 'Running'"
+            class="chat-viewport-running"
+            @click="ensureIframeFocus"
+            @mouseenter="ensureIframeFocus"
+          >
             <iframe
               :key="iframeKey"
               :src="serviceState.data?.web_url"
               class="dsh-seamless-frame"
-              allow="clipboard-read; clipboard-write;"
+              tabindex="0"
+              allow="clipboard-read; clipboard-write; forms; scripts; same-origin; fullscreen;"
               @load="onIframeLoad"
             ></iframe>
           </div>
