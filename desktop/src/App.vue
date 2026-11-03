@@ -533,13 +533,6 @@ const detectedArchFullLabel = computed<string>(() => {
   return cc || t("非 50 系架构", "Non-50 Series");
 });
 
-function getGpuArchShortName(arch: string): string {
-  if (arch === "sm120a") return t("RTX 50 系列 (sm_120a)", "RTX 50 Series (sm_120a)");
-  if (arch === "sm89") return t("RTX 40 系列 (sm_89)", "RTX 40 Series (sm_89)");
-  if (arch === "sm86") return t("RTX 30 系列 (sm_86)", "RTX 30 Series (sm_86)");
-  return t("非 50 系列显卡", "Non-50 Series GPU");
-}
-
 const hasPromptedDriverCheck = ref<boolean>(false);
 
 async function checkHardwareDriverOnStartup() {
@@ -553,27 +546,6 @@ async function checkHardwareDriverOnStartup() {
     appConfig.value.GpuArch = detectedHardwareArch.value;
     if (appConfig.value.KVDType === "nvfp4") {
       appConfig.value.KVDType = "rk4v4";
-    }
-  }
-
-  if (isGpuArchMismatch.value || isCudaDriverOutdated.value) {
-    const goConfig = await showConfirm({
-      title: t("显卡架构与驱动自动检测提醒", "GPU & Driver Auto-Detection Alert"),
-      message: isGpuArchMismatch.value
-        ? t(
-            `系统自动检测到本机显卡为「${dgpuName.value || detectedGpuShortName.value}」(${getGpuArchShortName(detectedHardwareArch.value)})，并非系统默认内置的 RTX 50 系列 (sm_120a)。\n\n请前往「模型」页面配置适配您当前显卡的引擎驱动文件 (ninfer-serve.exe)。`,
-            `System detected your GPU is "${dgpuName.value || detectedGpuShortName.value}" (${getGpuArchShortName(detectedHardwareArch.value)}), not the built-in RTX 50 Series (sm_120a).\n\nPlease go to the Model page to configure the matching engine driver file.`
-          )
-        : t(
-            `系统自动检测到本机 NVIDIA 显卡驱动版本为 ${dgpuDriver.value}，低于 CUDA 13 所需的最低版本 (570.00+)。\n\n请先升级 NVIDIA 显卡驱动或前往「模型」页面检查引擎驱动配置。`,
-            `Detected NVIDIA driver version ${dgpuDriver.value} is below the CUDA 13 requirement (570.00+).\n\nPlease update your NVIDIA GPU driver or check engine driver settings.`
-          ),
-      type: "warning",
-      confirmText: t("前往配置驱动", "Configure Driver"),
-      cancelText: t("稍后处理", "Later"),
-    });
-    if (goConfig) {
-      currentTab.value = "model";
     }
   }
 }
@@ -1901,15 +1873,6 @@ async function fetchStatus() {
 
 async function handleStart() {
   if (!isModelConfigured.value) {
-    await showAlert({
-      title: t("请先指定模型文件", "Model Not Configured"),
-      message: t(
-        "检测到尚未配置本地模型权重文件 (.ninfer)。\n点击确定后将为您自动跳转至「模型」配置页面进行指定。",
-        "No local model (.ninfer) configured.\nClick confirm to navigate to the Model configuration page."
-      ),
-      type: "warning",
-      confirmText: t("前往配置", "Go to Settings")
-    });
     modelNotConfiguredWarning.value = true;
     currentTab.value = "model";
     return;
@@ -1917,35 +1880,8 @@ async function handleStart() {
 
   // Pre-flight check: ensure model is compatible with NInfer engine
   if (modelMetadata.value && !modelMetadata.value.is_engine_compatible) {
-    await showAlert({
-      title: t("模型类型不兼容 · 无法启动", "Incompatible Model Format"),
-      message: t(
-        `当前 NInfer C++ 推理引擎仅支持加载标准 .ninfer 格式权重制品！\n\n当前文件：${modelMetadata.value.filename}\n检测类型：${modelMetadata.value.format}\n\n⚠️ ${modelMetadata.value.compatibility_notice}\n\n请前往「模型与引擎参数」页面更换为有效的 .ninfer 模型权重文件后再点击启动。`,
-        `Current engine only supports .ninfer model artifacts.\n\nFile: ${modelMetadata.value.filename}\nFormat: ${modelMetadata.value.format}\n\n⚠️ ${modelMetadata.value.compatibility_notice}`
-      ),
-      type: "danger",
-      confirmText: t("前往更换模型", "Change Model")
-    });
     currentTab.value = "model";
     return;
-  }
-
-  // Pre-flight check: detect if GPU is not 50-series and no custom engine driver is configured
-  if (isGpuArchMismatch.value) {
-    const goToArchSettings = await showConfirm({
-      title: t("显卡与驱动未适配提醒", "GPU Driver Configuration Required"),
-      message: t(
-        `系统自动检测到本机显卡为「${dgpuName.value || detectedGpuShortName.value}」(${getGpuArchShortName(detectedHardwareArch.value)})，并非系统默认内置的 RTX 50 系列 (sm_120a)，且尚未配置对应架构的引擎驱动。\n\n是否立即前往「模型」页面配置适配的引擎驱动文件？`,
-        `System detected your GPU is "${dgpuName.value || detectedGpuShortName.value}" (${getGpuArchShortName(detectedHardwareArch.value)}), not the built-in RTX 50 Series (sm_120a).\n\nWould you like to go to Model settings to configure the matching engine driver?`
-      ),
-      type: "warning",
-      confirmText: t("前往配置驱动", "Configure Driver"),
-      cancelText: t("仍然继续启动", "Continue Anyway")
-    });
-    if (goToArchSettings) {
-      currentTab.value = "model";
-      return;
-    }
   }
 
   try {
@@ -4624,7 +4560,7 @@ onUnmounted(() => {
               </div>
               <div class="banner-text">
                 <div class="banner-title-row">
-                  <h2 class="banner-title">{{ t('核心推理引擎与显存分层配置', 'Model Engine & Memory Tiering Configuration') }}</h2>
+                  <h2 class="banner-title">{{ t('引擎配置', 'Engine Configuration') }}</h2>
                   <span class="status-live-pill" :class="serviceState.status === 'Running' ? 'live-online' : 'live-standby'">
                     <span class="pulse-dot"></span>
                     {{ serviceState.status === 'Running' ? t('服务运行中', 'Engine Online') : t('引擎就绪待命', 'Engine Standby') }}
@@ -4772,7 +4708,7 @@ onUnmounted(() => {
                     </svg>
                   </div>
                   <div>
-                    <h3 class="studio-card-title">{{ t('本地模型制品与架构自动识别', 'Model Weights & Architecture Recognition') }}</h3>
+                    <h3 class="studio-card-title">{{ t('模型配置', 'Model Configuration') }}</h3>
                     <span class="studio-card-sub">{{ t('支持指定 *.ninfer 标准大模型制品，系统将自动穿透二进制解析架构、规模及量化精度', 'Specify *.ninfer model weights; architecture, scale, and quantization are automatically inspected.') }}</span>
                   </div>
                 </div>
@@ -4869,7 +4805,7 @@ onUnmounted(() => {
                     </svg>
                   </div>
                   <div>
-                    <h3 class="studio-card-title">{{ t('显卡硬件自动检测与引擎驱动配置', 'GPU Auto-Detection & Engine Driver Configuration') }}</h3>
+                    <h3 class="studio-card-title">{{ t('显卡驱动配置', 'GPU Driver Configuration') }}</h3>
                     <span class="studio-card-sub">{{ t('打开软件自动检测本机显卡架构与 NVIDIA 驱动；默认自带 RTX 50 系列 (sm_120a) 驱动，非 50 系显卡请在此配置对应驱动文件', 'Automatically detects GPU architecture & CUDA driver on startup. Built-in driver targets RTX 50 Series (sm_120a).') }}</span>
                   </div>
                 </div>
@@ -5105,7 +5041,7 @@ onUnmounted(() => {
               <div class="accordion-head clickable" @click="showAdvancedConfig = !showAdvancedConfig">
                 <div class="head-left">
                   <span class="accordion-arrow" :class="{ rotated: showAdvancedConfig }">▶</span>
-                  <strong class="accordion-title">{{ t('底层服务网络端口与环形缓冲高级参数', 'Underlying Network Ports & Ring Buffers (Advanced)') }}</strong>
+                  <strong class="accordion-title">{{ t('端口配置', 'Port Configuration') }}</strong>
                   <span class="accordion-sub">{{ t('推理端口、智能体服务端口以及 KV 环形滑动窗口内部细粒度分配', 'Engine ports, agent guard ports, and fine-grained ring buffer allocations.') }}</span>
                 </div>
                 <span class="accordion-badge">{{ showAdvancedConfig ? t('收起', 'Collapse') : t('展开', 'Expand') }}</span>
